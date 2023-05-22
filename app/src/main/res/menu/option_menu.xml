@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/optionASC"
+        android:title="Order by ASC" />
+    <item
+        android:id="@+id/optionDESC"
+        android:title="Order by DESC" />
+    <item
+        android:id="@+id/optionNew"
+        android:title="New Contact" />
+</menu>
