@@ -14,11 +14,9 @@ import java.util.List;
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
     private int resource;
-    private List<Contact> contacts;
-    public ContactAdapter(@NonNull Context context, int resource, @NonNull List<Contact> objects) {
-        super(context, resource, objects);
+    public ContactAdapter(@NonNull Context context, int resource) {
+        super(context, resource);
         this.resource = resource;
-        this.contacts = objects;
     }
 
     @NonNull
