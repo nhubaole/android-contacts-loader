@@ -1,5 +1,9 @@
 package com.example.contactsloader;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +14,8 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     ListView lvContacts;
     private boolean isASC;
     private ContactAdapter contactListAdapter;
+    ActivityResultLauncher<Intent> launcherCreateContact;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS_REQUEST_CODE);
         contactListAdapter = new ContactAdapter(this, R.layout.list_item_contact);
         lvContacts.setAdapter(contactListAdapter);
+
+        launcherCreateContact = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            isASC = true;
+                            LoaderManager.getInstance(MainActivity.this).restartLoader(CONTACT_LOADER,null,MainActivity.this);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -64,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
             case R.id.optionNew:
             {
+                Intent intent = new Intent(MainActivity.this, CreateContactActivity.class);
+                launcherCreateContact.launch(intent);
                 break;
             }
         }
